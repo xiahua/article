@@ -224,7 +224,7 @@ Object o = (Runnable) () -> { System.out.println("hi"); };
 List<String> ls = Collections.checkedList(new ArrayList<>(), String.class);
 Set<Integer> si = flag ? Collections.singleton(23) : Collections.emptySet();
 ```
-##6. 词法作用域（Lexical scoping）
+## 6. 词法作用域（Lexical scoping）
 
 在内部类中使用变量名（以及 this）非常容易出错。内部类中通过继承得到的成员（包括来自 Object 的方法）可能会把外部类的成员掩盖（shadow），此外未限定（unqualified）的 this 引用会指向内部类自己而非外部类。
 
@@ -290,7 +290,7 @@ int sum =list.stream()
 0 + list[0] + list[1] + list[2] + ...
 ```
 规约也可以完成其它操作，比如求最小值、最大值和乘积等等。如果操作符具有可结合性（associative），那么规约操作就可以容易的被并行化。所以，与其支持一个本质上是并行而且容易导致 race condition 的操作，我们选择在库中提供一个更加并行友好且不容易出错的方式来进行累积（accumulation）。
-##8. 方法引用（Method references）
+## 8. 方法引用（Method references）
 lambda 表达式允许我们定义一个匿名方法，并允许我们以函数式接口的方式使用它。我们也希望能够在 已有的 方法上实现同样的特性。
 
 方法引用和 lambda 表达式拥有相同的特性（例如，它们都需要一个目标类型，并需要被转化为函数式接口的实例），不过我们并不需要为方法引用提供方法体，我们可以直接通过方法名称引用已有方法。
@@ -368,7 +368,7 @@ SocketImplFactory factory = MySocketImpl::new;
 IntFunction<int[]> arrayMaker = int[]::new;
 int[] array = arrayMaker.apply(10) // 创建数组 int[10]
 ```
-##10. 默认方法和静态接口方法（Default and static interface methods）
+## 10. 默认方法和静态接口方法（Default and static interface methods）
 
 lambda 表达式和方法引用大大提升了 Java 的表达能力（expressiveness），不过为了使把 代码即数据 （code-as-data）变的更加容易，我们需要把这些特性融入到已有的库之中，以便开发者使用。
 
@@ -417,7 +417,7 @@ default void draw() { Artist.super.draw(); }
 ```
 super前面的类型必须是有定义或继承默认方法的类型。这种方法调用并不只限于消除命名冲突——我们也可以在其它场景中使用它。最后，接口在 inherits和 extends从句中的声明顺序和它们被实现的顺序无关。
 [](http://zh.lucida.me/blog/java-8-lambdas-insideout-language-features/#12-融会贯通（Putting-it-together）)
-##12. 融会贯通（Putting it together）
+## 12. 融会贯通（Putting it together）
 我们在设计lambda时的一个重要目标就是新增的语言特性和库特性能够无缝结合（designed to work together）。接下来，我们通过一个实际例子（按照姓对名字列表进行排序）来演示这一点：
 比如说下面的代码：
 ```java
