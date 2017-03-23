@@ -1,14 +1,14 @@
-##本文是对 [Brian Goetz](http://www.oracle.com/us/technologies/java/briangoetzchief-188795.html) 的 [State of Lambda](http://cr.openjdk.java.net/~briangoetz/lambda/lambda-state-final.html) 一文的翻译
-##为什么要翻译这个系列？
+# 本文是对 [Brian Goetz](http://www.oracle.com/us/technologies/java/briangoetzchief-188795.html) 的 [State of Lambda](http://cr.openjdk.java.net/~briangoetz/lambda/lambda-state-final.html) 一文的翻译
+## 为什么要翻译这个系列？
 - android开发中jdk开始支持Java 8，最近项目使用了Rxjava，使用lambada可以是代码更加简介
 - 刚开始使用有很多不熟悉的为了加深对lambda 的使用，学习Java 8新特性
-##警告（Caveats）
+## 警告（Caveats）
 如果你不知道什么是函数式编程，或者不了解 map，filter，reduce 这些常用的高阶函数，那么你不适合阅读本文，请先学习函数式编程基础。
 
-##[State of Lambda](http://cr.openjdk.java.net/~briangoetz/lambda/lambda-state-final.html) by [Brian Goetz](http://www.oracle.com/us/technologies/java/briangoetzchief-188795.html)
+## [State of Lambda](http://cr.openjdk.java.net/~briangoetz/lambda/lambda-state-final.html) by [Brian Goetz](http://www.oracle.com/us/technologies/java/briangoetzchief-188795.html)
 > The high-level goal of Project Lambda is to enable programming patterns that require modeling code as data to be convenient and idiomatic in Java.
 
-#关于
+# 关于
 
 本文介绍了 Java SE 8 中新引入的 lambda 语言特性以及这些特性背后的设计思想。这些特性包括：
 - lambda 表达式（又被成为“闭包”或“匿名方法”）
@@ -16,7 +16,7 @@
 - 扩展的目标类型和类型推导
 - 接口中的默认方法和静态方法
 
-##1.背景
+## 1.背景
  Java 是一门面向对象编程语言。面向对象编程语言和函数式编程语言中的基本元素（Basic Values）都可以动态封装程序行为：面向对象编程语言使用带有方法的对象封装行为，函数式编程语言使用函数封装行为。但这个相同点并不明显，因为Java 对象往往比较“重量级”：实例化一个类型往往会涉及不同的类，并需要初始化类里的字段和方法。
 
 不过有些 Java 对象只是对单个函数的封装。例如下面这个典型用例：Java API 中定义了一个接口（一般被称为回调接口），用户通过提供这个接口的实例来传入指定行为，例如：
@@ -48,7 +48,7 @@ button.addActionListener(new ActionListener() {
 - 通过允许编译器推断变量的“常量性”（finality），Java SE 8 减轻了问题 4 带来的困扰
 
 不过，Java SE 8 的目标并非解决所有上述问题。因此捕获可变变量（问题 4）和非局部控制流（问题 5）并不在 Java SE 8的范畴之内。（尽管我们可能会在未来提供对这些特性的支持）
-##2. 函数式接口（Functional interfaces）
+## 2. 函数式接口（Functional interfaces）
 
 尽管匿名内部类有着种种限制和问题，但是它有一个良好的特性，它和Java类型系统结合的十分紧密：每一个函数对象都对应一个接口类型。之所以说这个特性是良好的，是因为：
 
@@ -83,8 +83,8 @@ button.addActionListener(new ActionListener() {
 * BinaryOperator<T>——接收两个 T，返回 T
 
 除了上面的这些基本的函数式接口，我们还提供了一些针对原始类型（Primitive type）的特化（Specialization）函数式接口，例如 IntSupplier和 LongBinaryOperator。（我们只为 int、long和 double提供了特化函数式接口，如果需要使用其它原始类型则需要进行类型转换）同样的我们也提供了一些针对多个参数的函数式接口，例如 BiFunction<T, U, R>，它接收 T 对象和 U对象，返回 R对象。
-##3. lambda表达式（lambda expressions）
 
+## 3.lambda表达式（lambda expressions）
 匿名类型最大的问题就在于其冗余的语法。有人戏称匿名类型导致了“高度问题”（height problem）：比如前面 ActionListener 的例子里的五行代码中仅有一行在做实际工作。
 lambda表达式是匿名方法，它提供了轻量级的语法，从而解决了匿名内部类带来的“高度问题”。
 下面是一些lambda表达式：
@@ -117,7 +117,7 @@ new Thread(() -> {
   sendNotification();
 }).start();
 ```
-##4. 目标类型（Target typing）
+## 4. 目标类型（Target typing）
 
 需要注意的是，函数式接口的名称并不是 lambda 表达式的一部分。那么问题来了，对于给定的 lambda 表达式，它的类型是什么？答案是：它的类型是由其上下文推导而来。例如，下面代码中的 lambda 表达式类型是 ActionListener：
 ``` java	
@@ -158,7 +158,7 @@ List<Integer> li = Collections.emptyList();
 Map<String, Integer> m1 = new HashMap<>();
 Map<Integer, String> m2 = new HashMap<>();
 ```
-##5. 目标类型的上下文（Contexts for target typing）
+## 5. 目标类型的上下文（Contexts for target typing）
 
 之前我们提到 lambda 表达式智能出现在拥有目标类型的上下文中。下面给出了这些带有目标类型的上下文：
 
@@ -245,7 +245,7 @@ public class Hello {
 与之相类似的内部类实现则会打印出类似 Hello$1@5b89a773 和 Hello$2@537a7706 之类的字符串，这往往会使开发者大吃一惊。
 
 基于词法作用域的理念，lambda 表达式不可以掩盖任何其所在上下文中的局部变量，它的行为和那些拥有参数的控制流结构（例如 for 循环和 catch 从句）一致。
-##7. 变量捕获（Variable capture）
+## 7. 变量捕获（Variable capture）
 在 Java SE 7 中，编译器对内部类中引用的外部变量（即捕获的变量）要求非常严格：如果捕获的变量没有被声明为 final 就会产生一个编译错误。我们现在放宽了这个限制——对于 lambda 表达式和内部类，我们允许在其中捕获那些符合 有效只读（Effectively final）的局部变量。
 
 简单的说，如果一个局部变量在初始化后从未被修改过，那么它就符合有效只读的要求，换句话说，加上 final 后也不会导致编译错误的局部变量就是有效只读变量。
@@ -321,7 +321,7 @@ Consumer<String[]> b2 = Arrays:sort;    // void sort(Object[] a)
 Consumer<String> b3 = MyProgram::main;  // void main(String... args)
 Runnable r = Myprogram::mapToInt        // void main(String... args)
 ````
-##9. 方法引用的种类（Kinds of method references）
+## 9. 方法引用的种类（Kinds of method references）
 
 方法引用有很多种，它们的语法如下：
 
@@ -400,7 +400,7 @@ public static <T, U extends Comparable<? super U>>
   return (c1, c2) -> keyExtractor.apply(c1).compareTo(keyExtractor.apply(c2));
 }
 ```
-##11. 继承默认方法（Inheritance of default methods）
+## 11. 继承默认方法（Inheritance of default methods）
 和其它方法一样，默认方法也可以被继承，大多数情况下这种继承行为和我们所期待的一致。不过，当类型或者接口的超类拥有多个具有相同签名的方法时，我们就需要一套规则来解决这个冲突：
 * 类的方法（class method）声明优先于接口默认方法。无论该方法是具体的还是抽象的。
 * 被其它类型所覆盖的方法会被忽略。这条规则适用于超类型共享一个公共祖先的情况。
@@ -455,5 +455,5 @@ people.sort(comparing(Person::getLastName));
 ```java
 people.sort(comparing(Person::getLastName).reversed());
 ```
-#13. 小结（Summary）
+# 13. 小结（Summary）
 Java SE 8 提供的新语言特性并不算多——lambda 表达式，方法引用，默认方法和静态接口方法，以及范围更广的类型推导。但是把它们结合在一起之后，开发者可以编写出更加清晰简洁的代码，类库编写者可以编写更加强大易用的并行类库。
