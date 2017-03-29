@@ -2,7 +2,7 @@
 ## 关于
 本文是对 [Brian Goetz](http://www.oracle.com/us/technologies/java/briangoetzchief-188795.html)的[State of the Lambda: Libraries Edition](http://cr.openjdk.java.net/~briangoetz/lambda/lambda-libraries-final.html) 一文的翻译。
 
-
+[TOC]
 ## 背景（Background）
 自从lambda表达式成为Java语言的一部分之后，Java集合（Collections）API就面临着大幅变化。而 [JSR 355](https://jcp.org/en/jsr/detail?id=355)（规定了 Java lambda 表达式的标准）的正式启用更是使得 Java 集合 API 变的过时不堪。尽管我们可以从头实现一个新的集合框架（比如“Collection II”），但取代现有的集合框架是一项非常艰难的工作，因为集合接口渗透了 Java 生态系统的每个角落，将它们一一换成新类库需要相当长的时间。因此，我们决定采取演化的策略（而非推倒重来）以改进集合 API：
 * 为现有的接口（例如 Collection，List 和 Stream）增加扩展方法；
